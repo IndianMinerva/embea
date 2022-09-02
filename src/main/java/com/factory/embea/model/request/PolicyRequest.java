@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Past;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Getter
-public class InsuranceRequest {
+public class PolicyRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.YYYY")
+    @Past
     private Date startDate;
     private List<InsuredPerson> insuredPersons;
 
