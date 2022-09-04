@@ -1,6 +1,7 @@
 package com.factory.embea.controller;
 
 import com.factory.embea.model.request.PolicyRequest;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 public class InsuranceController {
 
     @PostMapping
-    //@Timed(value = "policy.create", description = "Time taken to create a policy")
+    @Timed(value = "policy.create", description = "Time taken to create a policy")
     public ResponseEntity<PolicyRequest> createPolicy(@Valid @RequestBody PolicyRequest policyRequest) {
         System.out.println(policyRequest.getStartDate());
         return ResponseEntity.ok(policyRequest);
