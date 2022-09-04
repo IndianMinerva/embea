@@ -14,7 +14,8 @@ import javax.validation.Valid;
 public class InsuranceController {
 
     @PostMapping
-    public ResponseEntity<PolicyRequest> createInsurance(@Valid @RequestBody PolicyRequest policyRequest) {
+    //@Timed(value = "policy.create", description = "Time taken to create a policy")
+    public ResponseEntity<PolicyRequest> createPolicy(@Valid @RequestBody PolicyRequest policyRequest) {
         System.out.println(policyRequest.getStartDate());
         return ResponseEntity.ok(policyRequest);
     }
