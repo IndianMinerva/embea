@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PolicyRepository extends MongoRepository<Policy, String> {
+    Policy findByPolicyIdAndStartDate(String policyId, String startDate);
 }
