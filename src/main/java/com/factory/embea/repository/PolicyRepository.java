@@ -4,7 +4,11 @@ import com.factory.embea.entity.Policy;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PolicyRepository extends MongoRepository<Policy, String> {
-    Policy findByPolicyIdAndStartDate(String policyId, String startDate);
+    Optional<Policy> findByPolicyIdAndStartDate(String policyId, String startDate);
+
+    Optional<Policy> findByPolicyId(String policyId);
 }

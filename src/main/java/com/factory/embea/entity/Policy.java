@@ -1,6 +1,6 @@
 package com.factory.embea.entity;
 
-import com.factory.embea.model.request.InsuredPerson;
+import com.factory.embea.model.request.InsuredPersonWithId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,6 @@ import java.util.List;
 public class Policy {
     private String policyId;
     private String startDate;
-    private List<InsuredPerson> insuredPersons;
+    private List<InsuredPersonWithId> insuredPersons;
     private Double totalPremium;
 }
