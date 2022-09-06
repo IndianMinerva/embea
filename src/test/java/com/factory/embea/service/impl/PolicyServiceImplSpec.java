@@ -69,7 +69,7 @@ public class PolicyServiceImplSpec {
 
     @Test
     @DisplayName("Test - Given new InsuredPersons, the new Insured Persons should be added to the Policy")
-    public void givenNewInsuredPersons_theyShouldNeAddedToThePolicy() {
+    public void givenNewInsuredPersons_theyShouldBeAddedToThePolicy() {
         //given
         var policyCreationRequest = new PolicyCreationRequest(
                 "01.01.3000",
@@ -101,6 +101,7 @@ public class PolicyServiceImplSpec {
         //when
         var updatedPolicy = policyServiceImpl.updatePolicy(policyModificationRequest);
 
+        //then
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(updatedPolicy.isPresent())
                     .as("Check if policy has been updated")
@@ -138,6 +139,74 @@ public class PolicyServiceImplSpec {
                             .map(InsuredPersonWithId::getPremium)
                             .mapToDouble(Double::doubleValue)
                             .sum());
+        });
+    }
+
+    @Test
+    @DisplayName("Test - Given InsuredPersons, the existing Insured Persons should not be updated")
+    public void givenExistingInsuredPersons_theyShouldNotBeUpdated() {
+        //given
+        var policyCreationRequest = new PolicyCreationRequest(
+                "01.01.3000",
+                List.of(new InsuredPerson("AAA", "BBB", 5.0d),
+                        new InsuredPerson("CCC", "DDD", 5.0d)
+                ));
+        var createdPolicy = mongoTemplate
+                .save(policyServiceImpl.policyCreationRequestToPolicy(policyCreationRequest));
+
+        PolicyModificationRequest policyModificationRequest = new PolicyModificationRequest(
+                createdPolicy.getPolicyId(),
+                "01.01.4000",
+                List.of(
+                        new InsuredPersonWithId(1L, "ASD", "FGH", 10.56d),
+                        new InsuredPersonWithId(null, "UVW", "XYZ", 11.56d)
+                )
+        );
+
+        Mockito.when(policyRepository
+                        .findByPolicyId(any()))
+                .thenReturn(Optional.ofNullable(mongoTemplate.findById(createdPolicy.getId(), Policy.class)));
+
+        Mockito.when(policyRepository
+                        .save(any()))
+                .thenReturn(mongoTemplate.save(policyServiceImpl
+                                .policyModificationRequestToPolicy(policyModificationRequest, createdPolicy)
+                        )
+                );
+        //when
+        var updatedPolicy = policyServiceImpl.updatePolicy(policyModificationRequest);
+
+        //then
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(updatedPolicy.isPresent())
+                    .as("Check if policy has been updated")
+                    .isEqualTo(true);
+
+            softly.assertThat(updatedPolicy.get().getPolicyId())
+                    .as("Check if the policy ID did not change")
+                    .isEqualTo(createdPolicy.getPolicyId());
+
+            softly.assertThat(updatedPolicy.get()
+                            .getInsuredPersons()
+                            .stream()
+                            .map(person -> person.getFirstName() + "|" + person.getLastName() + "|" + person.getPremium())
+                            .collect(Collectors.toList()))
+                    .as("Check if the first name and the last name matches for the new InsuredPersons")
+                    .contains(policyModificationRequest
+                            .getInsuredPersons()
+                            .stream()
+                            .filter(person -> person.getId() != null && person.getId() != 0)
+                            .map(person -> person.getFirstName() + "|" + person.getLastName() + "|" + person.getPremium())
+                            .findFirst().get());
+
+            softly.assertThat(updatedPolicy.get().getStartDate())
+                    .as("Check if the Effective dates are same")
+                    .isEqualTo(policyModificationRequest.getStartDate()); //TODO: rename it to effective date
+
+            softly.assertThat(updatedPolicy.get().getInsuredPersons().stream().filter(person -> person.getId() != null && person.getId() != 0)
+                            .collect(Collectors.toSet()).size())
+                    .as("Check if all the users have been assigned userIds and they are unique")
+                    .isEqualTo(policyModificationRequest.getInsuredPersons().size());
         });
     }
 
