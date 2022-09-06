@@ -27,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class PolicyServiceImplSpec {
+public class PolicyServiceImplTest {
     @Autowired
     private PolicyServiceImpl policyServiceImpl;
 
