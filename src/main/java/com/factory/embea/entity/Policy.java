@@ -1,6 +1,7 @@
 package com.factory.embea.entity;
 
 import com.factory.embea.model.request.InsuredPersonWithId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Getter
 public class Policy {
     @Id
+    @JsonIgnore
     private ObjectId id;
     private String policyId;
     private String startDate;
