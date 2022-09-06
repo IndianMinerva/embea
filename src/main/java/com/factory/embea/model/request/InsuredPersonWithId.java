@@ -19,8 +19,8 @@ public class InsuredPersonWithId {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof InsuredPersonWithId) {
-            return Objects.equals(id, ((InsuredPersonWithId) obj).getId());
+        if (obj instanceof InsuredPersonWithId otherPerson) {
+            return Objects.equals(id, otherPerson.getId());
         } else {
             return false;
         }

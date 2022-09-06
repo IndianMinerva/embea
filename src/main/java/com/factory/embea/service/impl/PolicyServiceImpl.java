@@ -27,17 +27,6 @@ public class PolicyServiceImpl implements PolicyService {
         return policyRepository.save(policyCreationRequestToPolicy(policyCreationRequest));
     }
 
-    Policy policyCreationRequestToPolicy(PolicyCreationRequest policyCreationRequest) {
-        String policyId = new ObjectId().toString();
-        String startDate = policyCreationRequest.getStartDate();
-        List<InsuredPersonWithId> insuredPersons = assignIdsToInsuredPersons(policyCreationRequest.getInsuredPersons());
-        Double totalPremium = insuredPersons.stream()
-                .map(InsuredPersonWithId::getPremium)
-                .mapToDouble(Double::doubleValue)
-                .sum();
-        return new Policy(policyId, startDate, insuredPersons, totalPremium);
-    }
-
     @Override
     public Optional<Policy> getPolicyDetails(PolicyDetailsRequest policyDetailsRequest) {
         return policyRepository.findByPolicyIdAndStartDate(
@@ -56,17 +45,31 @@ public class PolicyServiceImpl implements PolicyService {
         Optional<Policy> maybePolicy = policyRepository.findByPolicyId(policyModificationRequest.getPolicyId());
 
         return maybePolicy.map(policy -> {
-            List<InsuredPersonWithId> persons = assignIdsToModifiedUsers(policyModificationRequest, policy);
-            Policy updatedPolicy = new Policy(
-                    policy.getId(),
-                    policyModificationRequest.getPolicyId(),
-                    policyModificationRequest.getStartDate(),
-                    persons,
-                    persons.stream().map(InsuredPersonWithId::getPremium).mapToDouble(Double::doubleValue).sum()
-            );
-
+            Policy updatedPolicy = policyModificationRequestToPolicy(policyModificationRequest, policy);
             return Optional.of(policyRepository.save(updatedPolicy));
         }).orElse(Optional.empty());
+    }
+
+    Policy policyCreationRequestToPolicy(PolicyCreationRequest policyCreationRequest) {
+        String policyId = new ObjectId().toString();
+        String startDate = policyCreationRequest.getStartDate();
+        List<InsuredPersonWithId> insuredPersons = assignIdsToInsuredPersons(policyCreationRequest.getInsuredPersons());
+        Double totalPremium = insuredPersons.stream()
+                .map(InsuredPersonWithId::getPremium)
+                .mapToDouble(Double::doubleValue)
+                .sum();
+        return new Policy(policyId, startDate, insuredPersons, totalPremium);
+    }
+
+    Policy policyModificationRequestToPolicy(PolicyModificationRequest policyModificationRequest, Policy savedPolicy) {
+        List<InsuredPersonWithId> persons = assignIdsToModifiedUsers(policyModificationRequest, savedPolicy);
+        return new Policy(
+                savedPolicy.getId(),
+                policyModificationRequest.getPolicyId(),
+                policyModificationRequest.getStartDate(),
+                persons,
+                persons.stream().map(InsuredPersonWithId::getPremium).mapToDouble(Double::doubleValue).sum()
+        );
     }
 
     private List<InsuredPersonWithId> assignIdsToModifiedUsers(
@@ -79,7 +82,7 @@ public class PolicyServiceImpl implements PolicyService {
 
         List<InsuredPersonWithId> nonMatchingPersons = policyModificationRequest
                 .getInsuredPersons()
-                .stream().filter(person -> !policy.getInsuredPersons().contains(person)).collect(Collectors.toList());
+                .stream().filter(person -> !policy.getInsuredPersons().contains(person)).toList();
 
         List<InsuredPersonWithId> modifiedInsuredPersons = nonMatchingPersons.stream()
                 .map(person -> new InsuredPersonWithId(System.nanoTime(), person.getFirstName(), person.getLastName(), person.getPremium()))

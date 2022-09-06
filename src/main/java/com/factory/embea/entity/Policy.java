@@ -38,8 +38,7 @@ public class Policy {
 
     @Override
     public boolean equals(Object other) {
-        if (other instanceof Policy) {
-            Policy otherPolicy = (Policy) other;
+        if (other instanceof Policy otherPolicy) {
             return Objects.equals(otherPolicy.getId(), this.getId())
                     && Objects.equals(otherPolicy.getPolicyId(), this.getPolicyId())
                     && Objects.equals(otherPolicy.getStartDate(), this.getStartDate())
