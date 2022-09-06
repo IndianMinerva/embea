@@ -24,6 +24,10 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public Policy createPolicy(PolicyCreationRequest policyCreationRequest) {
+        return policyRepository.save(policyCreationRequestToPolicy(policyCreationRequest));
+    }
+
+    Policy policyCreationRequestToPolicy(PolicyCreationRequest policyCreationRequest) {
         String policyId = new ObjectId().toString();
         String startDate = policyCreationRequest.getStartDate();
         List<InsuredPersonWithId> insuredPersons = assignIdsToInsuredPersons(policyCreationRequest.getInsuredPersons());
@@ -31,8 +35,7 @@ public class PolicyServiceImpl implements PolicyService {
                 .map(InsuredPersonWithId::getPremium)
                 .mapToDouble(Double::doubleValue)
                 .sum();
-
-        return policyRepository.save(new Policy(policyId, startDate, insuredPersons, totalPremium));
+        return new Policy(policyId, startDate, insuredPersons, totalPremium);
     }
 
     @Override

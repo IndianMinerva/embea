@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Objects;
 
 @Document
 @NoArgsConstructor
@@ -33,5 +34,18 @@ public class Policy {
         this.startDate = startDate;
         this.insuredPersons = insuredPersons;
         this.totalPremium = totalPremium;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Policy) {
+            Policy otherPolicy = (Policy) other;
+            return Objects.equals(otherPolicy.getId(), this.getId())
+                    && Objects.equals(otherPolicy.getPolicyId(), this.getPolicyId())
+                    && Objects.equals(otherPolicy.getStartDate(), this.getStartDate())
+                    && Objects.equals(otherPolicy.getInsuredPersons(), this.getInsuredPersons())
+                    && Objects.equals(otherPolicy.getTotalPremium(), this.getTotalPremium());
+        }
+        return false;
     }
 }
