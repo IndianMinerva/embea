@@ -55,13 +55,14 @@ public class PolicyServiceImpl implements PolicyService {
         return maybePolicy.map(policy -> {
             List<InsuredPersonWithId> persons = assignIdsToModifiedUsers(policyModificationRequest, policy);
             Policy updatedPolicy = new Policy(
+                    policy.getId(),
                     policyModificationRequest.getPolicyId(),
                     policyModificationRequest.getStartDate(),
                     persons,
                     persons.stream().map(InsuredPersonWithId::getPremium).mapToDouble(Double::doubleValue).sum()
             );
 
-            return Optional.ofNullable(policyRepository.save(updatedPolicy));
+            return Optional.of(policyRepository.save(updatedPolicy));
         }).orElse(Optional.empty());
     }
 
