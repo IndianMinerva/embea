@@ -7,7 +7,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-public class DockerConfig {
+public class SwaggerConfig {
     @Bean
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2).select()
