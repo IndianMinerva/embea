@@ -14,4 +14,6 @@ public class PolicyModificationResponse {
     private String effectiveDate;
 
     private List<InsuredPersonWithId> insuredPersons;
+
+    private Double totalPremium;
 }

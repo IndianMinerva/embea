@@ -3,6 +3,7 @@ package com.factory.embea.service.impl;
 import com.factory.embea.entity.Policy;
 import com.factory.embea.model.request.*;
 import com.factory.embea.model.response.PolicyCreationResponse;
+import com.factory.embea.model.response.PolicyModificationResponse;
 import com.factory.embea.repository.PolicyRepository;
 import com.factory.embea.service.PolicyService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class PolicyServiceImpl implements PolicyService {
                 policy.getInsuredPersons(),
                 policy.getTotalPremium());
     }
+
     @Override
     public Optional<Policy> getPolicyDetails(PolicyDetailsRequest policyDetailsRequest) {
         return policyRepository.findByPolicyIdAndStartDate(
@@ -49,13 +51,22 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public Optional<Policy> updatePolicy(PolicyModificationRequest policyModificationRequest) {
+    public Optional<PolicyModificationResponse> updatePolicy(PolicyModificationRequest policyModificationRequest) {
         Optional<Policy> maybePolicy = policyRepository.findByPolicyId(policyModificationRequest.getPolicyId());
 
         return maybePolicy.map(policy -> {
             Policy updatedPolicy = policyModificationRequestToPolicy(policyModificationRequest, policy);
-            return Optional.of(policyRepository.save(updatedPolicy));
+            return Optional.of(toPolicyModificationResponse(policyRepository.save(updatedPolicy)));
         }).orElse(Optional.empty());
+    }
+
+    private PolicyModificationResponse toPolicyModificationResponse(Policy policy) {
+        return new PolicyModificationResponse(
+                policy.getPolicyId(),
+                policy.getStartDate(),
+                policy.getInsuredPersons(),
+                policy.getTotalPremium()
+        );
     }
 
     Policy policyCreationRequestToPolicy(PolicyCreationRequest policyCreationRequest) {

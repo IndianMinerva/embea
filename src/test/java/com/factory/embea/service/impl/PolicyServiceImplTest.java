@@ -123,7 +123,7 @@ public class PolicyServiceImplTest {
                             .map(person -> person.getFirstName() + "|" + person.getLastName() + "|" + person.getPremium())
                             .collect(Collectors.toList()));
 
-            softly.assertThat(updatedPolicy.get().getStartDate())
+            softly.assertThat(updatedPolicy.get().getEffectiveDate())
                     .as("Check if the Effective dates are same")
                     .isEqualTo(policyModificationRequest.getEffectiveDate()); //TODO: rename it to effective date
 
@@ -199,7 +199,7 @@ public class PolicyServiceImplTest {
                             .map(person -> person.getFirstName() + "|" + person.getLastName() + "|" + person.getPremium())
                             .findFirst().get());
 
-            softly.assertThat(updatedPolicy.get().getStartDate())
+            softly.assertThat(updatedPolicy.get().getEffectiveDate())
                     .as("Check if the Effective dates are same")
                     .isEqualTo(policyModificationRequest.getEffectiveDate()); //TODO: rename it to effective date
 

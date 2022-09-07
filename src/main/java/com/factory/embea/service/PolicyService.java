@@ -5,6 +5,7 @@ import com.factory.embea.model.request.PolicyCreationRequest;
 import com.factory.embea.model.request.PolicyDetailsRequest;
 import com.factory.embea.model.request.PolicyModificationRequest;
 import com.factory.embea.model.response.PolicyCreationResponse;
+import com.factory.embea.model.response.PolicyModificationResponse;
 
 import java.util.Optional;
 
@@ -15,5 +16,5 @@ public interface PolicyService {
 
     Optional<Policy> getPolicyDetails(String policyId, String startDate);
 
-    Optional<Policy> updatePolicy(PolicyModificationRequest policyModificationRequest);
+    Optional<PolicyModificationResponse> updatePolicy(PolicyModificationRequest policyModificationRequest);
 }
