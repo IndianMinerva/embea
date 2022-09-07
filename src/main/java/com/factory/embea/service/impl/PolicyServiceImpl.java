@@ -52,7 +52,7 @@ public class PolicyServiceImpl implements PolicyService {
 
     Policy policyCreationRequestToPolicy(PolicyCreationRequest policyCreationRequest) {
         String policyId = new ObjectId().toString();
-        String startDate = policyCreationRequest.getStartDate();
+        String startDate = policyCreationRequest.getEffectiveDate();
         List<InsuredPersonWithId> insuredPersons = assignIdsToInsuredPersons(policyCreationRequest.getInsuredPersons());
         Double totalPremium = insuredPersons.stream()
                 .map(InsuredPersonWithId::getPremium)

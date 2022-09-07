@@ -1,11 +1,11 @@
 package com.factory.embea.model.request;
 
+import com.factory.embea.constraint.FutureDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Past;
 import java.util.List;
 
 @NoArgsConstructor
@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 public class PolicyCreationRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.YYYY")
-    @Past
-    private String startDate;
+    @FutureDate(message = "The startDate must be in the future")
+    private String effectiveDate;
     private List<InsuredPerson> insuredPersons;
 }

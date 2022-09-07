@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -24,7 +25,7 @@ public class PolicyController {
 
     @PostMapping
     @Timed(value = "policy.create", description = "Time taken to create a policy")
-    public ResponseEntity<Policy> createPolicy(@RequestBody PolicyCreationRequest policyCreationRequest) {
+    public ResponseEntity<Policy> createPolicy(@Valid @RequestBody PolicyCreationRequest policyCreationRequest) {
         return ResponseEntity.ok(policyService.createPolicy(policyCreationRequest)); //Always succeeds
     }
 
@@ -36,7 +37,7 @@ public class PolicyController {
     }
 
     @PutMapping //Ideally @PatchMapping should be used
-    public ResponseEntity<Policy> updatePolicy(@RequestBody PolicyModificationRequest policyModificationRequest) {
+    public ResponseEntity<Policy> updatePolicy(@Valid @RequestBody PolicyModificationRequest policyModificationRequest) {
         return policyService.updatePolicy(policyModificationRequest)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
