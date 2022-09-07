@@ -2,6 +2,7 @@ package com.factory.embea.service.impl;
 
 import com.factory.embea.entity.Policy;
 import com.factory.embea.model.request.*;
+import com.factory.embea.model.response.PolicyCreationResponse;
 import com.factory.embea.repository.PolicyRepository;
 import com.factory.embea.service.PolicyService;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,17 @@ public class PolicyServiceImpl implements PolicyService {
     private final PolicyRepository policyRepository;
 
     @Override
-    public Policy createPolicy(PolicyCreationRequest policyCreationRequest) {
-        return policyRepository.save(policyCreationRequestToPolicy(policyCreationRequest));
+    public PolicyCreationResponse createPolicy(PolicyCreationRequest policyCreationRequest) {
+        return toPolicyCreationResponse(policyRepository.save(policyCreationRequestToPolicy(policyCreationRequest)));
     }
 
+    private PolicyCreationResponse toPolicyCreationResponse(Policy policy) {
+        return new PolicyCreationResponse(
+                policy.getPolicyId(),
+                policy.getStartDate(),
+                policy.getInsuredPersons(),
+                policy.getTotalPremium());
+    }
     @Override
     public Optional<Policy> getPolicyDetails(PolicyDetailsRequest policyDetailsRequest) {
         return policyRepository.findByPolicyIdAndStartDate(

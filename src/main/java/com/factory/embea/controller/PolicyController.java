@@ -4,6 +4,7 @@ import com.factory.embea.entity.Policy;
 import com.factory.embea.model.request.PolicyCreationRequest;
 import com.factory.embea.model.request.PolicyDetailsRequest;
 import com.factory.embea.model.request.PolicyModificationRequest;
+import com.factory.embea.model.response.PolicyCreationResponse;
 import com.factory.embea.service.PolicyService;
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class PolicyController {
 
     @PostMapping
     @Timed(value = "policy.create", description = "Time taken to create a policy")
-    public ResponseEntity<Policy> createPolicy(@Valid @RequestBody PolicyCreationRequest policyCreationRequest) {
+    public ResponseEntity<PolicyCreationResponse> createPolicy(@Valid @RequestBody PolicyCreationRequest policyCreationRequest) {
         return ResponseEntity.ok(policyService.createPolicy(policyCreationRequest)); //Always succeeds
     }
 
