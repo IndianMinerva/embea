@@ -1,11 +1,13 @@
 package com.factory.embea.constraint;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 public class FutureDateValidator implements ConstraintValidator<FutureDate, String> {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -13,12 +15,9 @@ public class FutureDateValidator implements ConstraintValidator<FutureDate, Stri
         try {
             var givenDate = LocalDate.parse(valueToValidate, dateTimeFormatter);
             var today = LocalDate.now();
-            System.out.println(givenDate + "    " + today + "      " + valueToValidate);
-            System.out.println("HELLO   " + !givenDate.isBefore(today));
             return !givenDate.isBefore(today);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Failed");
+            log.error("Error : {}", e);
             return false;
         }
     }
