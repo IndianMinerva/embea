@@ -31,7 +31,7 @@ public class PolicyServiceImpl implements PolicyService {
     public Optional<Policy> getPolicyDetails(PolicyDetailsRequest policyDetailsRequest) {
         return policyRepository.findByPolicyIdAndStartDate(
                 policyDetailsRequest.getPolicyId(),
-                Optional.ofNullable(policyDetailsRequest.getStartDate()).orElseGet(() -> DATE_FORMAT.format(new Date()))
+                Optional.ofNullable(policyDetailsRequest.getRequestDate()).orElseGet(() -> DATE_FORMAT.format(new Date()))
         );
     }
 
@@ -52,7 +52,7 @@ public class PolicyServiceImpl implements PolicyService {
 
     Policy policyCreationRequestToPolicy(PolicyCreationRequest policyCreationRequest) {
         String policyId = new ObjectId().toString();
-        String startDate = policyCreationRequest.getEffectiveDate();
+        String startDate = policyCreationRequest.getStartDate();
         List<InsuredPersonWithId> insuredPersons = assignIdsToInsuredPersons(policyCreationRequest.getInsuredPersons());
         Double totalPremium = insuredPersons.stream()
                 .map(InsuredPersonWithId::getPremium)
@@ -66,7 +66,7 @@ public class PolicyServiceImpl implements PolicyService {
         return new Policy(
                 savedPolicy.getId(),
                 policyModificationRequest.getPolicyId(),
-                policyModificationRequest.getStartDate(),
+                policyModificationRequest.getEffectiveDate(),
                 persons,
                 persons.stream().map(InsuredPersonWithId::getPremium).mapToDouble(Double::doubleValue).sum()
         );

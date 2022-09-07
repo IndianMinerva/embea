@@ -14,6 +14,6 @@ import java.util.List;
 public class PolicyCreationRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.YYYY")
     @FutureDate(message = "The startDate must be in the future")
-    private String effectiveDate;
+    private String startDate;
     private List<InsuredPerson> insuredPersons;
 }

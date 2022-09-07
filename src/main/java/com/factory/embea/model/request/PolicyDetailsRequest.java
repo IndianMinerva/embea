@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PolicyDetailsRequest {
     private String policyId;
-    private String startDate;
+    private String requestDate;
 }

@@ -13,8 +13,8 @@ public class PolicyModificationRequest {
     private String policyId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.YYYY")
-    @FutureDate(message = "The startDate must be in the future")
-    private String startDate;
+    @FutureDate(message = "The effectiveDate must be in the future")
+    private String effectiveDate;
 
     private List<InsuredPersonWithId> insuredPersons;
 }

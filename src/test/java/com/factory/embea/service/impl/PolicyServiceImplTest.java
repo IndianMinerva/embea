@@ -125,7 +125,7 @@ public class PolicyServiceImplTest {
 
             softly.assertThat(updatedPolicy.get().getStartDate())
                     .as("Check if the Effective dates are same")
-                    .isEqualTo(policyModificationRequest.getStartDate()); //TODO: rename it to effective date
+                    .isEqualTo(policyModificationRequest.getEffectiveDate()); //TODO: rename it to effective date
 
             softly.assertThat(updatedPolicy.get().getInsuredPersons().stream().filter(person -> person.getId() != null && person.getId() != 0)
                             .collect(Collectors.toSet()).size())
@@ -201,7 +201,7 @@ public class PolicyServiceImplTest {
 
             softly.assertThat(updatedPolicy.get().getStartDate())
                     .as("Check if the Effective dates are same")
-                    .isEqualTo(policyModificationRequest.getStartDate()); //TODO: rename it to effective date
+                    .isEqualTo(policyModificationRequest.getEffectiveDate()); //TODO: rename it to effective date
 
             softly.assertThat(updatedPolicy.get().getInsuredPersons().stream().filter(person -> person.getId() != null && person.getId() != 0)
                             .collect(Collectors.toSet()).size())
