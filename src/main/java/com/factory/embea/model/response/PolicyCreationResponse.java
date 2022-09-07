@@ -17,5 +17,5 @@ public class PolicyCreationResponse {
 
     private List<InsuredPersonWithId> insuredPersons;
 
-    private Double premium;
+    private Double premium; //Not validating this for non +ve number
 }

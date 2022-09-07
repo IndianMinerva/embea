@@ -3,6 +3,7 @@ package com.factory.embea.service.impl;
 import com.factory.embea.entity.Policy;
 import com.factory.embea.model.request.*;
 import com.factory.embea.model.response.PolicyCreationResponse;
+import com.factory.embea.model.response.PolicyDetailsResponse;
 import com.factory.embea.model.response.PolicyModificationResponse;
 import com.factory.embea.repository.PolicyRepository;
 import com.factory.embea.service.PolicyService;
@@ -38,10 +39,19 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     @Override
-    public Optional<Policy> getPolicyDetails(PolicyDetailsRequest policyDetailsRequest) {
+    public Optional<PolicyDetailsResponse> getPolicyDetails(PolicyDetailsRequest policyDetailsRequest) {
         return policyRepository.findByPolicyIdAndStartDate(
                 policyDetailsRequest.getPolicyId(),
-                Optional.ofNullable(policyDetailsRequest.getRequestDate()).orElseGet(() -> DATE_FORMAT.format(new Date()))
+                Optional.ofNullable(policyDetailsRequest.getRequestDate()).orElseGet(() -> DATE_FORMAT.format(new Date())
+        )).map(this::toPolicyDetailsResponse);
+    }
+
+    private PolicyDetailsResponse toPolicyDetailsResponse(Policy policy) {
+        return new PolicyDetailsResponse(
+                policy.getPolicyId(),
+                policy.getStartDate(),
+                policy.getInsuredPersons(),
+                policy.getTotalPremium()
         );
     }
 
